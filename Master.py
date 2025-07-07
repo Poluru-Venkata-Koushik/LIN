@@ -18,7 +18,12 @@ class messages():
     def __init__(self, id , p0, p1):
         self.breakval = "0b0000000000000"
         self.sync = "0b01010101"
-        self.id = None
-        self.p0 = None
-        self.p1 = None
+        self.id = id
+        self.p0 = p0
+        self.p1 = p1
+
+
+
+
     
+
