@@ -1,4 +1,5 @@
 import asyncio
+import time
 class linBus():
 
     def __init__(self):
@@ -36,11 +37,15 @@ class Slave():
     def printName(self):
         return self.name
     
-    def ProcessMessage(self):
-        while True:
-            if self.bus != []:
-                print([x for x in self.bus])
-            else:
-                print(f"{self.name} says : No messages on the bus")
+    async def ProcessMessage(self):
+        if self.bus != []:
+            print([x for x in self.bus])
+            self.bus=[]
+        else:
+            pass
+
+            
+                
+
     
 

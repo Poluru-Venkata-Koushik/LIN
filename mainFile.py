@@ -5,8 +5,8 @@ import asyncio
 
 
 def clear_screen() -> None:
-    #os.system("cls" if os.name == "nt" else "clear")
-    pass # will remove it after testing
+    os.system("cls" if os.name == "nt" else "clear")
+    #pass # will remove it after testing
 
 global inputDict,a,lin
 
@@ -66,7 +66,7 @@ def addID():
     clear_screen()
     if not len(lin.slaves)==0 :
         print(" Current ECUs ", [slaves.name for slaves in lin.slaves])
-        slave_to_add = next( x for x in lin.slaves if x.name == input("Enter the ECU name"))
+        slave_to_add = next( x for x in lin.slaves if x.name == input("Enter the ECU name : "))
         slave_to_add.ID.append(input("Enter ID:"))
     else:
         print("No ECUs to add ID to")
@@ -78,23 +78,27 @@ async def processMessages():
         await asyncio.gather(*(s.ProcessMessage() for s in lin.slaves))
         await asyncio.sleep(1)    
 
+def calculateP0P1(hex_id):
+    value = int(hex_id, 0)  
+    print(f"{value & 0xFF:08b}")
 
 
 def addMessage():
-    lin.bus.append("Hello Mawa!! ewwwww")
-    print("Adding Message")
-    time.sleep(1)
+    idToQuery = input("Enter the ID of ECU you wish to query :")
+    calculateP0P1(idToQuery)
+    lin.bus.append("idToQuery")
+    
 
 inputDict = {
     "1" : ["Add Slave",addSlave],
     "2" : ["Remove Slave",RemoveSlave],
     "3" : ["Show Slaves",showSlaves],
     "4" : ["Message - Unconditional",addMessage],
-    "5" : "Message - Event Triggered",
-    "6" : "Message - UDS",
+    "5" : ["Message - Event Triggered", exit],
+    "6" : ["Message - UDS", exit],
     "7" : ["Add ID to ECU ",addID],
-    "8" : "Add Entry to Schedule Table",
-    "99" : "Exit",
+    "8" : ["Add Entry to Schedule Table", exit],
+    "99" : ["Exit", exit]
 }
 
 async def main():
@@ -104,7 +108,7 @@ async def main():
     while True : 
         clear_screen()
         PrintMenu()
-        a = input("Enter your choice : ")
+        a = await asyncio.to_thread(input, "Enter your choice : ")
         if ValidateInput():
             inputDict[a][1]()
         else :
