@@ -39,6 +39,8 @@ class Slave():
     
     async def ProcessMessage(self):
         if self.bus != []:
+            msg = self.bus
+            print(msg)
             print([x for x in self.bus])
             self.bus=[]
         else:
